@@ -1,2 +1,39 @@
-Olá<br>
-{{message}}
+<style>
+    .btn-upload {
+  color: #009ee3;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #009ee326;
+  border: 0px;
+  width: 200px;
+  height: 200px; 
+}
+
+.inputfile {
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  cursor: pointer;
+  opacity: 0; 
+  /* 
+  
+  */
+}
+</style>
+
+<div class="row">
+    <div class="col">
+        <input type="file" id="importFile" class="inputfile" ng-file-model="files" multiple />
+        <button class="btn-upload">Choose a file</button>
+    </div>
+    <div class="col">
+        Arquivos selecionados:
+        <p ng-repeat="file in 2">
+            {{file.name}}
+        </p>
+    </div>
+</div>
+<div class="row">
+    <br>
+    <button type="button" ng-click="upload()">Enviar arquivos</button>
+</div>

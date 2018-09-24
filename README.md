@@ -4,7 +4,7 @@ Upload file in storage Rackspace with NodeJS
 ##Setup##
 
 npm install
-run $node app.js
+node app.js
 
 access http://localhost:3000
 
