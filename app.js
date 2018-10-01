@@ -4,14 +4,9 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
+var services = require('./services');
 var http = require('http');
 var path = require('path');
-
-
-//load routes
-//var customers = require('./routes/customers');
-//var api = require('./routes/api');
 
 var app = express();
 
@@ -23,7 +18,6 @@ var jsonParser = bodyParser.json();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-//app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -38,9 +32,8 @@ if ('development' == app.get('env')) {
 }
 
 //Links controllers
-app.get('/', routes.index);
-app.get('/page/one', routes.one);
-app.get('/page/three', routes.three);
+app.get('/', services.index);
+app.post('/api/upload-files', services.uploadFiles);
 
 app.use(app.router);
 

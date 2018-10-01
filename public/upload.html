@@ -1,5 +1,5 @@
 <style>
-    .btn-upload {
+.btn-upload {
   color: #009ee3;
   font-size: 20px;
   font-weight: bold;
@@ -9,31 +9,42 @@
   height: 200px; 
 }
 
-.inputfile {
+.input-file {
   position: absolute;
   height: 200px;
   width: 200px;
   cursor: pointer;
   opacity: 0; 
-  /* 
-  
-  */
 }
 </style>
 
 <div class="row">
     <div class="col">
-        <input type="file" id="importFile" class="inputfile" ng-file-model="files" multiple />
+        <input type="file" id="files" name="files" class="input-file" onchange="angular.element(this).scope().loadFiles(this.files)"
+            multiple />
         <button class="btn-upload">Choose a file</button>
     </div>
     <div class="col">
-        Arquivos selecionados:
-        <p ng-repeat="file in 2">
-            {{file.name}}
-        </p>
+        <table class="table table-striped" ng-show="files.length > 0">
+            <thead>
+                <tr>
+                    <th scope="col">Action</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Size</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="file in files">
+                    <td><button ng-click="deleteFile(file.name)">X</button></td>
+                    <th>{{file.name}}</th>
+                    <th>{{file.size / 1000}} Kb</th>
+                </tr>
+            </tbody>
+        </table>
+
     </div>
 </div>
-<div class="row">
+<div class="row" ng-show="files.length > 0">
     <br>
-    <button type="button" ng-click="upload()">Enviar arquivos</button>
+    <button type="button" ng-click="uploadToServer()">Upload Files to Server</button>
 </div>

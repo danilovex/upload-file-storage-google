@@ -1,19 +1,47 @@
 /*global app*/
 'use strict';
-app.controller('Ctrl', function($scope) {
-    // create a message to display in our view
+app.controller('Ctrl', function($scope, $http) {
+
     $scope.files = []; 
 
-    $scope.upload = () => {
+    $scope.deleteFile = (name) => {
+        let list = [];
+        angular.forEach($scope.files, (file, key) => {
+            if(file.name !== name)
+                list.push(file);
+        });
+        $scope.files = list;
+    };
 
-        debugger;
+    $scope.uploadToServer = () => {
+        
+        var fd = new FormData();
 
-        var files = document.getElementById('importFile').files;
+        angular.forEach($scope.files, (file, key) => {
+            fd.append("file", file);
+        });
+    
+        $http.post('api/upload-files', fd, {
+            withCredentials: true,
+            headers: {'Content-Type': undefined },
+            transformRequest: angular.identity
+        }).success((result) => {
+            console.log(result);
+            alert('Success import files!');
+        }).error((err) => {
+            console.log(err);
+            alert('Ops...one or more errors occured =(')
+        });
+    
+    };
+
+    $scope.loadFiles = (files) => {
+
         var isMoreLimitSize = false;
         var nameMoreLimitSize = [];
 
         angular.forEach(files, (file, key) => {
-            if ((file.size / 1000) > 1000) {
+            if ((file.size / 1000) > 1000) { ///maior que 1Mb
                 isMoreLimitSize = true;
                 nameMoreLimitSize.push(file.name);
             }
@@ -21,11 +49,12 @@ app.controller('Ctrl', function($scope) {
         });
 
         if(isMoreLimitSize){
-            alert('Arquivos maiores que o limite:' + nameMoreLimitSize.join(','))
+            alert('Not permited import files more than 1Mb:' + nameMoreLimitSize.join(','))
             return false
         }
 
+        $scope.files = files;
+        $scope.$apply();
 
-        //console.log($scope.files)
     };
 });
