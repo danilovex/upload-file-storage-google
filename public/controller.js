@@ -3,14 +3,37 @@
 app.controller('Ctrl', function($scope, $http) {
 
     $scope.files = []; 
+    $scope.loadItems = true;
+
+    $scope.downloadFile = (name) => {
+        $http.get('api/files/link-download/' + name).success((result) => {
+
+            console.log(result);
+
+            
+        }).error((err) => {
+            console.log(err);
+            alert('Ops...one or more errors occured =(')
+        }); 
+    };
 
     $scope.deleteFile = (name) => {
         let list = [];
-        angular.forEach($scope.files, (file, key) => {
-            if(file.name !== name)
-                list.push(file);
-        });
-        $scope.files = list;
+
+        $http.delete('api/files/' + name).success((result) => {
+
+            angular.forEach($scope.files, (file, key) => {
+                if(file.name !== name)
+                    list.push(file);
+            });
+            $scope.files = list;
+
+            
+        }).error((err) => {
+            console.log(err);
+            alert('Ops...one or more errors occured =(')
+        }); 
+
     };
 
     $scope.uploadToServer = () => {
@@ -21,7 +44,7 @@ app.controller('Ctrl', function($scope, $http) {
             fd.append("file", file);
         });
     
-        $http.post('api/upload-files', fd, {
+        $http.post('api/files', fd, {
             withCredentials: true,
             headers: {'Content-Type': undefined },
             transformRequest: angular.identity
@@ -41,6 +64,7 @@ app.controller('Ctrl', function($scope, $http) {
         var nameMoreLimitSize = [];
 
         angular.forEach(files, (file, key) => {
+            file['import'] = 'No';
             if ((file.size / 1000) > 1000) { ///maior que 1Mb
                 isMoreLimitSize = true;
                 nameMoreLimitSize.push(file.name);
@@ -57,4 +81,22 @@ app.controller('Ctrl', function($scope, $http) {
         $scope.$apply();
 
     };
+
+
+    function initialize(){
+        $http.get('api/files').success((files) => {
+            angular.forEach(files, (file, key) => {
+                file['import'] = 'Yes';
+            });
+            $scope.files = files;
+            $scope.loadItems = false;  
+        }).error((err) => {
+            console.log(err);
+            alert('Ops...one or more errors occured =(')
+        });   
+    }
+
+    initialize();
+
+
 });

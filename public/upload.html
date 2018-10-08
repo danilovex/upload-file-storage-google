@@ -24,20 +24,28 @@
             multiple />
         <button class="btn-upload">Choose a file</button>
     </div>
-    <div class="col">
+    <div class="col" ng-show="loadItems">
+        Loading server items...
+    </div>
+    <div class="col" ng-hide="loadItems">
         <table class="table table-striped" ng-show="files.length > 0">
             <thead>
                 <tr>
                     <th scope="col">Action</th>
                     <th scope="col">File</th>
                     <th scope="col">Size</th>
+                    <th scope="col">Imported</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="file in files">
-                    <td><button ng-click="deleteFile(file.name)">X</button></td>
+                    <td>
+                        <button ng-click="deleteFile(file.name)">X</button>
+                        <button ng-click="downloadFile(file.name)">Download</button>
+                    </td>
                     <th>{{file.name}}</th>
                     <th>{{file.size / 1000}} Kb</th>
+                    <th>{{file.import}}</th>
                 </tr>
             </tbody>
         </table>

@@ -33,7 +33,10 @@ if ('development' == app.get('env')) {
 
 //Links controllers
 app.get('/', services.index);
-app.post('/api/upload-files', services.uploadFiles);
+app.post('/api/files', services.uploadFile);
+app.get('/api/files', services.listFiles);
+app.delete('/api/files/:name', services.deleteFile);
+app.get('/api/files/link-download/:name', services.downloadFile);
 
 app.use(app.router);
 
