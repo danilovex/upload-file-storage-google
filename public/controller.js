@@ -7,8 +7,10 @@ app.controller('Ctrl', function($scope, $http, $window, $q) {
     $scope.loadItems = true;
     $scope.bucketName = 'clientxpto';
 
-    $scope.downloadFile = (name) => {
-        $http.get('api/files/link-download/' + name).success((result) => {
+    $scope.downloadFile = (file) => {
+        let name = file.name;
+        let bucket = file.bucketName;        
+        $http.get('api/files/link-download/?bucket=' + bucket + '&name='+ name).success((result) => {
             $window.open(result.link, '_blank');
         }).error((err) => {
             console.log(err);

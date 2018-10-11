@@ -198,9 +198,6 @@ async function _deleteFile(req) {
   return true;
 }
 
-
-
-
 async function _generateSignedUrl(req) {
 
   let options = {
@@ -208,8 +205,9 @@ async function _generateSignedUrl(req) {
     expires: Date.now() + 1000 * 60 * 60, // one hour
   };
 
-  let bucketName = 'clientxpto';
-  let filename = req.params.name;
+  let bucketName = req.query.bucket;
+  let filename = req.query.name;
+
   const [url] = await storage
     .bucket(bucketName)
     .file(filename)

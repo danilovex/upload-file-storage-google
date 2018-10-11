@@ -45,7 +45,7 @@
                 <tr ng-repeat="file in files">
                     <td>
                         <button ng-click="deleteFile(file)">X</button>
-                        <button ng-click="downloadFile(file.name)">Download</button>
+                        <button ng-click="downloadFile(file)">Download</button>
                     </td>                    
                     <th>{{file.bucketName}}</th>
                     <th>{{file.name}}</th>

@@ -36,7 +36,7 @@ app.get('/', services.index);
 app.post('/api/files', services.uploadFile);
 app.get('/api/files', services.listFiles);
 app.delete('/api/files', services.deleteFile);
-app.get('/api/files/link-download/:name', services.generateSignedUrl);
+app.get('/api/files/link-download', services.generateSignedUrl);
 
 app.use(app.router);
 
