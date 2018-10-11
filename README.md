@@ -12,8 +12,10 @@ O arquivo 'services/index.js' contém a variável 'projectId' que deve ser troca
 ##Setup##
 
 npm install
+
+##Start Aplication##
+
 node app.js
 
 access http://localhost:3000
 
-##Start Aplication##
