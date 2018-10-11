@@ -1,26 +1,26 @@
 /*global app*/
 'use strict';
-app.controller('Ctrl', function($scope, $http) {
+app.controller('Ctrl', function($scope, $http, $window, $q) {
 
     $scope.files = []; 
+    $scope.filesUpload = [];
     $scope.loadItems = true;
+    $scope.bucketName = 'clientxpto';
 
     $scope.downloadFile = (name) => {
         $http.get('api/files/link-download/' + name).success((result) => {
-
-            console.log(result);
-
-            
+            $window.open(result.link, '_blank');
         }).error((err) => {
             console.log(err);
             alert('Ops...one or more errors occured =(')
         }); 
     };
 
-    $scope.deleteFile = (name) => {
+    $scope.deleteFile = (file) => {
         let list = [];
-
-        $http.delete('api/files/' + name).success((result) => {
+        let name = file.name;
+        let bucket = file.bucketName;
+        $http.delete('api/files?bucket=' + bucket + '&name='+ name).success((result) => {
 
             angular.forEach($scope.files, (file, key) => {
                 if(file.name !== name)
@@ -36,27 +36,42 @@ app.controller('Ctrl', function($scope, $http) {
 
     };
 
-    $scope.uploadToServer = () => {
+    function uploadToServer() {
         
-        var fd = new FormData();
+        var promises = [];
 
-        angular.forEach($scope.files, (file, key) => {
+        let param = '?bucketName=' + $scope.bucketName;
+        let folder = $scope.folder;
+        if(folder){
+            param = param + '&folder=' + folder;
+        }
+
+        angular.forEach($scope.filesUpload, (file, key) => {
+
+            let fd = new FormData();
             fd.append("file", file);
+
+            promises.push($http.post('api/files' + param, fd, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
+            }));
         });
-    
-        $http.post('api/files', fd, {
-            withCredentials: true,
-            headers: {'Content-Type': undefined },
-            transformRequest: angular.identity
-        }).success((result) => {
+
+        $q.all(promises).then((result) => {
             console.log(result);
+            initialize();
             alert('Success import files!');
-        }).error((err) => {
+        }).catch((err) => {
             console.log(err);
             alert('Ops...one or more errors occured =(')
         });
     
-    };
+    }
+
+    function isNullOrEmpty(v){
+        return v === null || v === undefined || v === '';
+    }
 
     $scope.loadFiles = (files) => {
 
@@ -77,8 +92,15 @@ app.controller('Ctrl', function($scope, $http) {
             return false
         }
 
-        $scope.files = files;
+        if(isNullOrEmpty($scope.bucketName)){
+            alert('BucketName is null!');
+            return false;
+        }
+
+        $scope.filesUpload = files;
         $scope.$apply();
+
+        uploadToServer();
 
     };
 

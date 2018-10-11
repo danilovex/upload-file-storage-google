@@ -17,13 +17,16 @@
   opacity: 0; 
 }
 </style>
-
-<div class="row">
+<div class="row" style="margin: 30px;">
+    <form>
     <div class="col">
+        Bucket Name: <input type="text" name="bucketName" id="bucketName" ng-model="bucketName" > 
+        - Folder: <input type="text" name="folder" id="folder" ng-model="folder"> <br><br>
         <input type="file" id="files" name="files" class="input-file" onchange="angular.element(this).scope().loadFiles(this.files)"
             multiple />
         <button class="btn-upload">Choose a file</button>
     </div>
+    </form>
     <div class="col" ng-show="loadItems">
         Loading server items...
     </div>
@@ -32,6 +35,7 @@
             <thead>
                 <tr>
                     <th scope="col">Action</th>
+                    <th scope="col">Bucket</th>
                     <th scope="col">File</th>
                     <th scope="col">Size</th>
                     <th scope="col">Imported</th>
@@ -40,9 +44,10 @@
             <tbody>
                 <tr ng-repeat="file in files">
                     <td>
-                        <button ng-click="deleteFile(file.name)">X</button>
+                        <button ng-click="deleteFile(file)">X</button>
                         <button ng-click="downloadFile(file.name)">Download</button>
-                    </td>
+                    </td>                    
+                    <th>{{file.bucketName}}</th>
                     <th>{{file.name}}</th>
                     <th>{{file.size / 1000}} Kb</th>
                     <th>{{file.import}}</th>
@@ -51,8 +56,4 @@
         </table>
 
     </div>
-</div>
-<div class="row" ng-show="files.length > 0">
-    <br>
-    <button type="button" ng-click="uploadToServer()">Upload Files to Server</button>
 </div>

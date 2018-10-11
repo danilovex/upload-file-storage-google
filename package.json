@@ -1,19 +1,16 @@
 {
-  "name": "sigac",
+  "name": "upload-file-storage-google",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
+    "@google-cloud/storage": "^2.0.3",
     "body-parser": "^1.12.2",
-    "cache": "^2.1.0",
     "ejs": "^2.6.1",
     "express": "3.5.1",
-    "express-myconnection": "1.0.4",
     "formidable": "^1.2.1",
-    "jade": "*",
-    "mysql": "2.2.0",
-    "pkgcloud": "^1.5.0"
+    "jade": "*"
   }
 }
