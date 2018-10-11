@@ -17,7 +17,10 @@
   opacity: 0; 
 }
 </style>
-<div class="row" style="margin: 30px;">
+<div class="row" style="margin: 30px;" ng-show="uploading">
+    Uploading files...wait...
+</div>
+<div class="row" style="margin: 30px;" ng-show="!uploading">
     <form>
     <div class="col">
         Bucket Name: <input type="text" name="bucketName" id="bucketName" ng-model="bucketName" > 

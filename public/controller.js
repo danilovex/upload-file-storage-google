@@ -6,6 +6,7 @@ app.controller('Ctrl', function($scope, $http, $window, $q) {
     $scope.filesUpload = [];
     $scope.loadItems = true;
     $scope.bucketName = 'clientxpto';
+    $scope.uploading = false;
 
     $scope.downloadFile = (file) => {
         let name = file.name;
@@ -59,11 +60,12 @@ app.controller('Ctrl', function($scope, $http, $window, $q) {
                 transformRequest: angular.identity
             }));
         });
-
+        $scope.uploading = true;
         $q.all(promises).then((result) => {
             console.log(result);
             initialize();
             alert('Success import files!');
+            $scope.uploading = false;
         }).catch((err) => {
             console.log(err);
             alert('Ops...one or more errors occured =(')
